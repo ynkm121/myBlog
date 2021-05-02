@@ -1,9 +1,10 @@
-package com.liu.blog.dao;
+package com.liu.blog.pojo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liu.blog.dao.BlogLinkMapper">
+    <resultMap id="BaseResultMap" type="BlogLink">
+        <id column="link_id" jdbcType="INTEGER" property="linkId"/>
+        <result column="link_type" jdbcType="TINYINT" property="linkType"/>
+        <result column="link_name" jdbcType="VARCHAR" property="linkName"/>
+        <result column="link_url" jdbcType="VARCHAR" property="linkUrl"/>
+        <result column="link_description" jdbcType="VARCHAR" property="linkDescription"/>
+        <result column="link_rank" jdbcType="INTEGER" property="linkRank"/>
+        <result column="is_deleted" jdbcType="TINYINT" property="isDeleted"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+    <sql id="BaseCloumnList">
+        link_id, link_type, link_name, link_url, link_description, link_rank, is_deleted, 
+    create_time
+    </sql>
+    <select id="getAllLinks" parameterType="map" resultMap="BaseResultMap">
+        select
+            <include refid="BaseCloumnList"/>
+        from tb_link
+        where is_deleted = 0
+        order by link_id DESC
+        <if test="start != null and limit != null">
+            limit #{limit} offset #{start}
+        </if>
+    </select>
+    <select id="getLinksCount" parameterType="map">
+        select count(*)
+        from tb_link
+        where is_deleted = 0
+        <if test="start != null and limit != null">
+            limit #{limit} offset #{start}
+        </if>
+    </select>
+
+</mapper>

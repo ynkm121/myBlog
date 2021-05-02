@@ -1,7 +1,126 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liu.blog.dao.BlogMapper">
+    <resultMap id="BaseResultMap" type="Blog">
+        <id column="blog_id" jdbcType="BIGINT" property="blogId"/>
+        <result column="blog_title" jdbcType="VARCHAR" property="blogTitle"/>
+        <result column="blog_sub_url" jdbcType="VARCHAR" property="blogSubUrl"/>
+        <result column="blog_cover_image" jdbcType="VARCHAR" property="blogCoverImage"/>
+        <result column="blog_category_id" jdbcType="INTEGER" property="blogCategoryId"/>
+        <result column="blog_category_name" jdbcType="VARCHAR" property="blogCategoryName"/>
+        <result column="blog_tags" jdbcType="VARCHAR" property="blogTags"/>
+        <result column="blog_status" jdbcType="TINYINT" property="blogStatus"/>
+        <result column="blog_views" jdbcType="BIGINT" property="blogViews"/>
+        <result column="enable_comment" jdbcType="TINYINT" property="enableComment"/>
+        <result column="is_deleted" jdbcType="TINYINT" property="isDeleted"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="Blog">
+        <result column="blog_content" jdbcType="LONGVARCHAR" property="blogContent"/>
+    </resultMap>
+    <sql id="BaseColumnList">
+        blog_id, blog_title, blog_sub_url, blog_cover_image, blog_category_id, blog_category_name,
+    blog_tags, blog_status, blog_views, enable_comment, is_deleted, create_time, update_time
+    </sql>
+    <sql id="BlobColumnList">
+        blog_content
+    </sql>
+
+    <select id="getBlogsList" resultMap="BaseResultMap" parameterType="Map">
+        select
+            <include refid="BaseColumnList"/>
+        from tb_blog
+        where is_deleted = 0
+        <if test="keyword != null">
+            and blog_title like concat('%', #{keyword}, '%') or blog_category_name like concat('%', #{keyword}, '%')
+        </if>
+        <if test="blogStatus != null">
+            and blog_status = #{blogStatus}
+        </if>
+        <if test="blogCategoryId != null">
+            and blog_category_id = #{blogCategoryId}
+        </if>
+        order by blog_id DESC
+        <if test="start != null and limit != null">
+            limit #{limit} offset #{start}
+        </if>
+    </select>
+    <select id="getBlogCounts" resultType="int">
+        select count(*)
+        from tb_blog
+        where is_deleted = 0
+        <if test="keyWords != null">
+            and blog_title like concat('%', #{keyWords}, '%') or blog_category_name like concat('%', #{keyWords}, '%')
+        </if>
+        <if test="blogStatus != null">
+            and blog_status = #{blogStatus}
+        </if>
+        <if test="blogCategoryId != null">
+            and blog_category_id = #{blogCategoryId}
+        </if>
+    </select>
+    <select id="getBlogListByType" resultMap="BaseResultMap">
+        select *
+        from tb_blog
+        where is_deleted = 0
+        <if test="type != null and type == 0">
+            order by blog_views DESC
+        </if>
+        <if test="type != null and type == 1">
+            order by blog_id DESC
+        </if>
+        limit #{limit}
+    </select>
+    <select id="getBlogsByTagId" resultMap="BaseResultMap" parameterType="map">
+        select
+            <include refid="BaseColumnList"/>
+        from
+            tb_blog
+        where
+            blog_id in (SELECT blog_id from tb_blog_tag_relation where tag_id = #{tagId})
+            and is_deleted = 0
+            and blog_status = 1
+        order by blog_id DESC
+        <if test="start != null and limit != null">
+            limit #{limit} offset #{start}
+        </if>
+    </select>
+    <select id="getBlogByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="int">
+        select
+            <include refid="BaseColumnList"/>
+            ,
+            <include refid="BlobColumnList"/>
+        from
+            tb_blog
+        where
+            blog_id = #{blogId}
+    </select>
+    <select id="getBlogBySubUrl" resultMap="ResultMapWithBLOBs" parameterType="string">
+        select
+            <include refid="BaseColumnList"/>
+            ,
+            <include refid="BlobColumnList"/>
+        from tb_blog
+        where blog_sub_url = #{subUrl} and is_deleted = 0 limit 1
+    </select>
+    <update id="updateByPrimaryKey" parameterType="Blog">
+        update tb_blog
+        set blog_title = #{blogTitle,jdbcType=VARCHAR},
+            blog_sub_url = #{blogSubUrl,jdbcType=VARCHAR},
+            blog_cover_image = #{blogCoverImage,jdbcType=VARCHAR},
+            blog_category_id = #{blogCategoryId,jdbcType=INTEGER},
+            blog_category_name = #{blogCategoryName,jdbcType=VARCHAR},
+            blog_tags = #{blogTags,jdbcType=VARCHAR},
+            blog_status = #{blogStatus,jdbcType=TINYINT},
+            blog_views = #{blogViews,jdbcType=BIGINT},
+            enable_comment = #{enableComment,jdbcType=TINYINT},
+            is_deleted = #{isDeleted,jdbcType=TINYINT},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where blog_id = #{blogId,jdbcType=BIGINT};
+    </update>
 
 </mapper>
