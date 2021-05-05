@@ -186,20 +186,17 @@ public class blogController {
         return "blog/" + theme + "/link";
     }
 
-    @ApiOperation(value = "关于/其他域名过滤")
-    @GetMapping("/{subUrl}")
-    public String subUrl(Model model, @PathVariable("subUrl")String subUrl){
-        BlogDetailVO blogDetailVO = blogService.getBlogBySubUrl(subUrl);
+    @ApiOperation(value = "关于")
+    @GetMapping("/about")
+    public String subUrl(Model model){
+        BlogDetailVO blogDetailVO = blogService.getBlogBySubUrl("about");
         if(blogDetailVO != null){
-            model.addAttribute("pageName", subUrl);
+            model.addAttribute("pageName", "about");
             model.addAttribute("blogDetailVO", blogDetailVO);
             model.addAttribute("configurations", blogConfigService.getConfig());
             return "blog/" + theme + "/detail";
-        }else if(subUrl.equals("swagger-ui.html")){
-            return "forward:classpath:/META-INF/resources/swagger-ui.html";
-        }else{
-            return "error/error_404";
         }
+        return null;
     }
 
 
