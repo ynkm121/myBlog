@@ -15,6 +15,10 @@ spring:
       max-lifetime: 30000
       connection-timeout: 30000
       connection-test-query: SELECT 1
+  servlet:
+    multipart:
+      max-file-size: 3MB
+      max-request-size: 10MB
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.liu.blog.pojo

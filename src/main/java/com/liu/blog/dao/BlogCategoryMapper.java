@@ -12,11 +12,17 @@ import java.util.List;
 @Repository
 public interface BlogCategoryMapper {
 
-    List<BlogCategory> getAllCategory();
+    List<BlogCategory> getAllCategory(PageQueryUtils utils);
 
     int getCategoryCount(PageQueryUtils utils);
 
     BlogCategory getCategoryById(@Param("categoryId") int id);
 
     BlogCategory getCategoryByName(@Param("categoryName")String name);
+
+    int updateByPrimaryKeySelective(BlogCategory category);
+
+    int insertCategorySelective(BlogCategory category);
+
+    int BatchDelete(Integer[] ids);
 }

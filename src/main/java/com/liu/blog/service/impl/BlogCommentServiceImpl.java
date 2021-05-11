@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -39,5 +40,39 @@ public class BlogCommentServiceImpl implements BlogCommentService {
     @Override
     public Boolean addComment(BlogComment blogComment) {
         return commentMapper.insertSelective(blogComment) > 0;
+    }
+
+    @Override
+    public int getCommentCount() {
+        return commentMapper.getCommentCount(null);
+    }
+
+    @Override
+    public PageResult getCommentPage(PageQueryUtils pageUtil) {
+        List<BlogComment> comments = commentMapper.getComment(pageUtil);
+        int counts = commentMapper.getCommentCount(null);
+        return new PageResult(counts, pageUtil.getLimit(), pageUtil.getPage(), comments);
+    }
+
+    @Override
+    public boolean BatchCheck(Integer[] commentIds) {
+        return commentMapper.BatchCheck(commentIds) > 0;
+    }
+
+    @Override
+    public boolean replyComment(Integer commentId, String reply) {
+        BlogComment comment = commentMapper.getCommentById(commentId);
+        if(comment != null && comment.getCommentStatus() == 1){
+            comment.setReplyBody(reply);
+            comment.setReplyCreateTime(new Date());
+            return commentMapper.updateSelective(comment) > 0;
+
+        }
+        return false;
+    }
+
+    @Override
+    public boolean BatchDelete(Integer[] ids) {
+        return commentMapper.BatchDelete(ids) > 0;
     }
 }

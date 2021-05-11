@@ -17,8 +17,15 @@
     <sql id="BaseColumnList">
         tag_id, tag_name, is_deleted, create_time
     </sql>
-    <select id="getTagCounts" parameterType="map">
-        select * from tb_blog_tag
+    <select id="getTagsList" parameterType="map" resultMap="BaseResultMap">
+        select
+            <include refid="BaseColumnList"/>
+        from tb_blog_tag
+        where is_deleted = 0
+        limit #{limit} offset #{start}
+    </select>
+    <select id="getTagCounts" parameterType="map" resultType="int">
+        select count(*) from tb_blog_tag
         where is_deleted=0
     </select>
     <select id="getTagsForIndex" resultMap="BaseCountResultMap">
@@ -35,5 +42,51 @@
         where
             tag_name = #{tagName} and is_deleted = 0
     </select>
+    <insert id="insertSelective" parameterType="BlogTag" useGeneratedKeys="true" keyProperty="tagId">
+        insert into tb_blog_tag
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tagId != null">
+                tag_id,
+            </if>
+            <if test="tagName != null">
+                tag_name,
+            </if>
+            <if test="isDeleted != null">
+                is_deleted,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tagId != null">
+                #{tagId,jdbcType=INTEGER},
+            </if>
+            <if test="tagName != null">
+                #{tagName,jdbcType=VARCHAR},
+            </if>
+            <if test="isDeleted != null">
+                #{isDeleted,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <insert id="BatchInsertTags" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="tagId">
+        insert into tb_blog_tag (tag_name)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.tagName})
+        </foreach>
+    </insert>
+    <update id="BatchDelete">
+        update tb_blog_tag
+        set is_deleted = 1
+        where tag_id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
 
 </mapper>

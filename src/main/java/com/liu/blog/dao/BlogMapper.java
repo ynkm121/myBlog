@@ -32,4 +32,10 @@ public interface BlogMapper {
     void updateByPrimaryKey(Blog blog);
 
     Blog getBlogBySubUrl(String subUrl);
+
+    int updateByPrimaryKeySelective(Blog blog);
+
+    int insertSelective(Blog blog);
+
+    int BatchDelete(Integer[] ids);
 }

@@ -12,9 +12,17 @@ import java.util.List;
 @Mapper
 public interface BlogTagMapper {
 
+    List<BlogTag> getTagsList(PageQueryUtils utils);
+
     int getTagCounts(PageQueryUtils utils);
 
     List<BlogTagCount> getTagsForIndex();
 
     BlogTag getTagByName(String tagName);
+
+    int BatchInsertTags(List<BlogTag> tags);
+
+    int insertSelective(BlogTag tag);
+
+    int BatchDelete(Integer[] ids);
 }

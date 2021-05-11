@@ -12,22 +12,28 @@
     <sql id="Base_Column_List">
         config_name, config_value, create_time, update_time
     </sql>
+    <select id="getConfigByName" parameterType="String" resultMap="BaseResultMap">
+        select
+            <include refid="Base_Column_List"/>
+        from tb_config
+        where config_name = #{configName}
+    </select>
     <select id="selectAll" resultMap="BaseResultMap">
         select
             <include refid="Base_Column_List"/>
         from tb_config;
     </select>
-    <update id="updateConfig" parameterType="BlogConfig">
+    <update id="updateByNameSelective" parameterType="BlogConfig" >
         update tb_config
         <set>
             <if test="configValue != null"/>
-                config_value = #{configValue, jdbcType=VARCHAR}
-            <if test="create_time != null"/>
-                create_time = #{createTime, jdbcType=TIMESTAMP}
-            <if test="update_time != null"/>
-                update_time = #{updateTime, jdbcType=TIMESTAMP}
+                config_value = #{configValue, jdbcType=VARCHAR},
+            <if test="createTime != null"/>
+                create_time = #{createTime, jdbcType=TIMESTAMP},
+            <if test="updateTime != null"/>
+                update_time = #{updateTime, jdbcType=TIMESTAMP},
         </set>
-        where;
+        where config_name = #{configName,jdbcType=VARCHAR};
     </update>
 
 </mapper>

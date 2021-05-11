@@ -14,4 +14,12 @@ public interface BlogLinkMapper {
     List<BlogLink> getAllLinks(PageQueryUtils utils);
 
     int getLinksCount(PageQueryUtils utils);
+
+    int insertSelective(BlogLink link);
+
+    int BatchDelete(Integer[] ids);
+
+    BlogLink getLinkById(Integer linkId);
+
+    int updateByIdSelective(BlogLink link);
 }

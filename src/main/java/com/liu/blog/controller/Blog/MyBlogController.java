@@ -21,7 +21,7 @@ import java.util.Map;
 
 @Api(value = "博客访问类")
 @Controller
-public class blogController {
+public class MyBlogController {
 
     public static String theme = "amaze";
 

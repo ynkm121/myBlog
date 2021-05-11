@@ -1,7 +1,53 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liu.blog.dao.UserMapper">
+    <resultMap id="BaseResultMap" type="BlogUser">
+        <id column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="login_user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="login_password" jdbcType="VARCHAR" property="password"/>
+        <result column="nick_name" jdbcType="VARCHAR" property="nickName"/>
+        <result column="locked" jdbcType="TINYINT" property="locked"/>
+    </resultMap>
+    <sql id="BaseColumnList">
+        user_id, login_user_name, login_password, nick_name, locked
+    </sql>
+    <select id="login" parameterType="string" resultMap="BaseResultMap">
+        select
+            <include refid="BaseColumnList"/>
+        from tb_user
+        where login_user_name = #{userName} and login_password = #{passwordMD5} and locked = 0
+    </select>
+    <select id="getUserByName" parameterType="string" resultMap="BaseResultMap">
+        select
+        <include refid="BaseColumnList"/>
+        from tb_user
+        where login_user_name = #{userName} and locked = 0;
+    </select>
+    <select id="getUserById" parameterType="int" resultMap="BaseResultMap">
+        select
+        <include refid="BaseColumnList"/>
+        from tb_user
+        where user_id = #{userId} and locked = 0;
+    </select>
+    <update id="updateByPrimaryKeySelective" parameterType="BlogUser">
+        update tb_user
+        <set>
+            <if test="userName != null">
+                login_user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                login_password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="nickName != null">
+                nick_name = #{nickName,jdbcType=VARCHAR},
+            </if>
+            <if test="locked != null">
+                locked = #{locked,jdbcType=TINYINT},
+            </if>
+        </set>
+        where user_id = #{userId};
+    </update>
 
 </mapper>

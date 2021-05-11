@@ -1,4 +1,4 @@
-package com.site.blog.my.core.controller.common;
+package com.liu.blog.controller.common;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;

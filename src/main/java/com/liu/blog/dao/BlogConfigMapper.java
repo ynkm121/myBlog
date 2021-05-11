@@ -12,5 +12,7 @@ public interface BlogConfigMapper {
 
     List<BlogConfig> selectAll();
 
-    int updateConfig(BlogConfig config);
+    int updateByNameSelective(BlogConfig config);
+
+    BlogConfig getConfigByName(String configName);
 }

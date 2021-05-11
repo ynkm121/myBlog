@@ -18,6 +18,8 @@ public interface BlogService {
     //搜索对应类
     PageResult getByCategoryName(String name, int page);
 
+    Blog getBlogById(int blogId);
+
     PageResult getByTagName(String tagName, int page);
 
     PageResult getByKeyword(String keyword, int page);
@@ -27,4 +29,12 @@ public interface BlogService {
     BlogDetailVO getBlogDetail(int blogId);
 
     BlogDetailVO getBlogBySubUrl(String subUrl);
+
+    int getBlogCount();
+
+    String updateBlog(Blog blog);
+
+    String saveBlog(Blog blog);
+
+    boolean batchDelete(Integer[] ids);
 }

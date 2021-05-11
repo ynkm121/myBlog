@@ -1,4 +1,4 @@
-package com.site.blog.my.core.util;
+package com.liu.blog.utils;
 
 import java.security.MessageDigest;
 

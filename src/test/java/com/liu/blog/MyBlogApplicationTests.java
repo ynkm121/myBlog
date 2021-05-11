@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +48,7 @@ class MyBlogApplicationTests {
 
     @Test
     void getCategoryTest(){
-        List<BlogCategory> allCategory = blogCategoryMapper.getAllCategory();
+        List<BlogCategory> allCategory = blogCategoryMapper.getAllCategory(null);
         for (BlogCategory category : allCategory) {
             System.out.println(category);
         }
@@ -87,6 +88,17 @@ class MyBlogApplicationTests {
             System.out.println(blogComment);
         }
         System.out.println(count);
+    }
+
+    @Test
+    public void test(){
+        LinkedList<Integer> list = new LinkedList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        System.out.println(list.get(0) + " " + list.size());
+        list.remove(0);
+        System.out.println(list.get(0)+ " " + list.size());
     }
 
 }

@@ -14,7 +14,15 @@ public interface BlogCommentMapper {
 
     List<BlogComment> getComment(Map<String, Object> param);
 
+    BlogComment getCommentById(Integer commentId);
+
     int insertSelective(BlogComment record);
 
     int getCommentCount(Map<String, Object> param);
+
+    int BatchCheck(Integer[] ids);
+
+    int updateSelective(BlogComment comment);
+
+    int BatchDelete(Integer[] ids);
 }

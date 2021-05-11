@@ -37,6 +37,12 @@
             limit #{limit} offset #{start}
         </if>
     </select>
+    <select id="getCommentById" resultMap="BaseResultMap" parameterType="int">
+        select
+            <include refid="BaseColumnList"/>
+        from tb_blog_comment
+        where comment_id = #{commentId} and is_deleted = 0
+    </select>
     <select id="getCommentCount" parameterType="map" resultType="int">
         select
             count(*)
@@ -50,7 +56,7 @@
             and comment_status = #{commentStatus}
         </if>
     </select>
-    <update id="insertSelective" parameterType="BlogComment">
+    <insert id="insertSelective" parameterType="BlogComment">
         insert into tb_blog_comment
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="commentId != null">
@@ -128,5 +134,61 @@
                 #{isDeleted,jdbcType=TINYINT},
             </if>
         </trim>
+    </insert>
+    <update id="updateSelective" parameterType="BlogComment">
+        update tb_blog_comment
+        <set>
+            <if test="blogId != null">
+                blog_id = #{blogId,jdbcType=BIGINT},
+            </if>
+            <if test="commentator != null">
+                commentator = #{commentator,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="websiteUrl != null">
+                website_url = #{websiteUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="commentBody != null">
+                comment_body = #{commentBody,jdbcType=VARCHAR},
+            </if>
+            <if test="commentCreateTime != null">
+                comment_create_time = #{commentCreateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="commentatorIp != null">
+                commentator_ip = #{commentatorIp,jdbcType=VARCHAR},
+            </if>
+            <if test="replyBody != null">
+                reply_body = #{replyBody,jdbcType=VARCHAR},
+            </if>
+            <if test="replyCreateTime != null">
+                reply_create_time = #{replyCreateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="commentStatus != null">
+                comment_status = #{commentStatus,jdbcType=TINYINT},
+            </if>
+            <if test="isDeleted != null">
+                is_deleted = #{isDeleted,jdbcType=TINYINT},
+            </if>
+        </set>
+        where comment_id = #{commentId,jdbcType=BIGINT}
+    </update>
+    <update id="BatchCheck">
+        update tb_blog_comment
+        set comment_status = 1
+        where comment_id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+        and comment_status = 0
+    </update>
+    <update id="BatchDelete">
+        update tb_blog_comment
+        set is_deleted = 1
+        where comment_id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
     </update>
 </mapper>

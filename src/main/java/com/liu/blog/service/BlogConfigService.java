@@ -10,5 +10,5 @@ public interface BlogConfigService {
 
     Map<String, String> getConfig();
 
-    int updateConfig(BlogConfig config);
+    int updateConfig(String configName, String configValue);
 }
