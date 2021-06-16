@@ -1,0 +1,24 @@
+server:
+  port: 8081
+spring:
+  datasource:
+    username: root
+    password: lkm99314
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/my_blog_db?useSSL=false&characterEncoding=utf8&useUncode=true&serverTimezone=Asia/Shanghai
+    hikari:
+      auto-commit: true
+      minimum-idle: 5
+      maximum-pool-size: 15
+      idle-timeout: 30000
+      pool-name: hikariCP
+      max-lifetime: 30000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+  servlet:
+    multipart:
+      max-file-size: 3MB
+      max-request-size: 10MB
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.liu.blog.pojo
