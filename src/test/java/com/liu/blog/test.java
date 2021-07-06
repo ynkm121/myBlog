@@ -31,6 +31,7 @@ public class test {
 
     @Test
     public void test2() {
+<<<<<<< HEAD
         int i = 3;
         boolean isFind = false;
         while(i-- > 0 && !isFind ){
@@ -41,5 +42,8 @@ public class test {
                 }
             }
         }
+=======
+
+>>>>>>> dev
     }
 }
